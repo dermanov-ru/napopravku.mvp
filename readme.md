@@ -13,3 +13,9 @@ copy `.env.example` to `.env`
 php artisan key:generate
 # Application key set successfully.
 ```
+
+Подключаем авторизацию
+```bash
+php artisan make:auth
+php artisan migrate
+```
