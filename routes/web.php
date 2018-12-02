@@ -13,7 +13,7 @@
 
 Route::get('/', function () {
     return view('welcome');
-})->middleware('auth');
+});
 
 Route::get('/login', function () {
     return "Login page";
@@ -22,3 +22,6 @@ Route::get('/login', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/doctors', 'DoctorController@index')->name('doctors');
+Route::get('/services', 'ServiceController@index')->name('services');
