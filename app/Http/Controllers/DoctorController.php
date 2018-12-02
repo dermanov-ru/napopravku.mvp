@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Doctor;
+use App\DoctorSlot;
 use Illuminate\Http\Request;
 
 class DoctorController extends Controller
@@ -18,8 +19,9 @@ class DoctorController extends Controller
     
     public function card($id)
     {
-        $doctor = Doctor::findOrFail($id);
-
+        $doctor = Doctor::with([ "services" ])->findOrFail($id);
+        $doctor->loadSlots(4);
+        
         return view('doctor', [
             "doctor" => $doctor
         ]);

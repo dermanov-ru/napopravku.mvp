@@ -1,0 +1,25 @@
+.slots{
+
+}
+.slots .date{
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+.slots .slot{
+    border: 1px solid #ced4da;
+    padding: 5px;
+    cursor: default;
+}
+.slots .slot.free{
+    background: #c5e8e9;
+}
+.slots .slot.free:hover{
+    cursor: pointer;
+    color: #fff;
+    background-color: #ffa601;
+    border-color: #ffa601;
+}
+.slots .slot.busy{
+
+}

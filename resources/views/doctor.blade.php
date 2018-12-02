@@ -35,6 +35,30 @@
             <div class="card">
                 <div class="card-body">
                     <form>
+
+                        <h5 class="mb-3">Выберите дату и время приёма</h5>
+                        <div class="form-group">
+                            <div class="row slots">
+
+                                @foreach ($doctor->slotsByDate() as $date => $slots)
+                                    <div class="col-xs-12 col-sm-2 text-center mb-3">
+                                        <div class="date">{{  $date }}</div>
+
+                                        @foreach ($slots as $slot)
+                                            @if ($slot->is_free)
+                                                <div class="slot free">{{ $slot->time() }}</div>
+                                            @else
+                                                <div class="slot"> - </div>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                @endforeach
+
+
+                            </div>
+                        </div>
+
+
                         <div class="form-group">
                             <select class="form-control" required>
                                 <option value="">- Выбрать услугу -</option>
