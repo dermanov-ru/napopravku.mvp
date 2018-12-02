@@ -19,3 +19,10 @@ php artisan key:generate
 php artisan make:auth
 php artisan migrate
 ```
+
+Накатываем миграции и наполняем тестовыми данными
+```bash
+php artisan migrate
+php artisan db:seed
+```
+
