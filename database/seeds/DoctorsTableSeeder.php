@@ -13,37 +13,37 @@ class DoctorsTableSeeder extends Seeder
     {
         $doctors = [
             [
-                'name' => "Гаприндашвили Бесарион Джумберович",
+                'name' => "Бесарион Джумберович",
                 'photo_url' => "https://napopravku.ru/upload/resize_cache/iblock/24e/284_284_6/24ef8a21528b2ea8ebe7b7f91ba221d4.png",
                 'exp_years' => 30,
             ],
             
             [
-                'name' => "Подолянский Александр Николаевич",
+                'name' => "Александр Николаевич",
                 'photo_url' => "https://napopravku.ru/upload/resize_cache/iblock/be1/284_284_6/be1f7fe830a51e0f1d5b62b119bb59b5.jpg",
                 'exp_years' => 10,
             ],
             
             [
-                'name' => "Шадрина Евгения Евгеньевна",
+                'name' => "Евгения Евгеньевна",
                 'photo_url' => "https://napopravku.ru/upload/resize_cache/iblock/b64/284_284_6/b64fbdfedf482acfbe7e7e4af1bd9d87.jpg",
                 'exp_years' => 10,
             ],
             
             [
-                'name' => "Павлинова (Живова) Юлия Александровна",
+                'name' => "Юлия Александровна",
                 'photo_url' => "https://napopravku.ru/upload/resize_cache/iblock/0f4/284_284_6/0f4d0e2b2da04d51f8a9324f613c6af4.jpg",
                 'exp_years' => 10,
             ],
             
             [
-                'name' => "Салмин Игорь Николаевич",
+                'name' => "Игорь Николаевич",
                 'photo_url' => "https://napopravku.ru/upload/resize_cache/iblock/54e/284_284_6/54e338950ae4fb7ef68e91114e1fb255.jpg",
                 'exp_years' => 20,
             ],
             
             [
-                'name' => "Александров Леонид Владимирович",
+                'name' => "Леонид Владимирович",
                 'photo_url' => "https://napopravku.ru/upload/resize_cache/iblock/3cb/284_284_6/3cbbb7233c81df592de7e771ef84c83e.jpg",
                 'exp_years' => 10,
             ],
