@@ -1,7 +1,15 @@
 @extends('layouts.app')
 
+@push('scripts')
+    <script type="text/javascript" src="{{ asset ('js/doctor.vue.js') }}"></script>
+
+    <script>
+        let doctorApp = new DoctorApp({!! $doctor->toJson() !!});
+    </script>
+@endpush
+
 @section('content')
-<div class="container">
+<div class="container" id="doctor_app">
     <h2 class="mb-2">{{ $doctor->name }}</h2>
 
     <nav aria-label="breadcrumb" class="mb-5">
@@ -34,53 +42,51 @@
 
             <div class="card">
                 <div class="card-body">
-                    <form>
+                    @if(session()->has('order_done'))
+                        <div class="alert alert-success">
+                            Вы успешно записались на прием!
+                        </div>
+                    @endif
+
+
+                    <form action="{{ url('order') }}" method="post" id="order_form" @submit.prevent="order">
+                        @csrf
+                        <input type="hidden" v-model="selected_slot.id" name="slot_id">
+                        <input type="hidden" value="{{ $doctor->id }}" name="doctor_id">
 
                         <h5 class="mb-3">Выберите дату и время приёма</h5>
                         <div class="form-group">
                             <div class="row slots">
 
-                                @foreach ($doctor->slotsByDate() as $date => $slots)
+                                <template v-for="(slots, date, index) in doctor.slots_by_date">
                                     <div class="col-xs-12 col-sm-2 text-center mb-3">
-                                        <div class="date">{{  $date }}</div>
+                                        <div class="date">@{{  date }}</div>
 
-                                        @foreach ($slots as $slot)
-                                            @if ($slot->is_free)
-                                                <div class="slot free">{{ $slot->time() }}</div>
-                                            @else
-                                                <div class="slot"> - </div>
-                                            @endif
-                                        @endforeach
+                                        <template v-for="slot in slots">
+                                            <div :class="['slot', { 'free' : slot.is_free }, { 'selected' : selected_slot == slot }]" @click="selected_slot = slot">
+                                                @{{ slot.is_free ? slot.time : " - " }}
+                                            </div>
+                                        </template>
                                     </div>
-                                @endforeach
-
+                                </template>
 
                             </div>
                         </div>
 
 
                         <div class="form-group">
-                            <select class="form-control" required>
+                            <input type="text" class="form-control" placeholder="Дата и время*" readonly :value="selected_datetime">
+                            <small class="form-text text-muted">Выберите дату и время в таблице</small>
+                        </div>
+
+                        <div class="form-group">
+                            <select class="form-control" required name="service_id">
                                 <option value="">- Выбрать услугу -</option>
 
                                 @foreach ($doctor->services as $service)
                                     <option value="{{ $service->id }}">{{ $service->name }} ({{ $service->pivot->price }} руб.)</option>
                                 @endforeach
                             </select>
-                        </div>
-
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Номер телефона*" required>
-                            <small class="form-text text-muted">На этот номер придет смс для подтверждения</small>
-                        </div>
-
-                        <div class="form-group">
-                            <textarea class="form-control" placeholder="Вы можете указать, к какому врачу, на какое время или с каким вопросом" rows="3" cols="80" required="required">Запись на прием</textarea>
-                        </div>
-
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" required>
-                            <label class="form-check-label" for="exampleCheck1">Согласен с условиями</label>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Записаться</button>

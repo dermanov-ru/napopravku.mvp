@@ -6,7 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Doctor extends Model
 {
+    public $timestamps = false;
     public $slots = null;
+    
+    
+    protected $appends = ['slots_by_date'];
+    
+    public function getSlotsByDateAttribute()
+    {
+        return $this->attributes['slots_by_date'] = $this->slotsByDate();
+    }
     
     public function services(  )
     {

@@ -14,7 +14,9 @@
 .slots .slot.free{
     background: #c5e8e9;
 }
-.slots .slot.free:hover{
+.slots .slot.free:hover,
+.slots .slot.selected
+{
     cursor: pointer;
     color: #fff;
     background-color: #ffa601;
