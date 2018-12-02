@@ -24,7 +24,17 @@
                         @if (count($service->doctors))
                             @foreach ($service->doctors as $doctor)
                                 <li class="list-group-item">
-                                    <a href="#" class="card-link" title="Записаться на приём">{{ $doctor->name }}</a>
+                                    <div class="row">
+                                        <div class="col-xs-4 mr-2">
+                                            <a href="{{ route('doctor', $doctor->id) }}" class="card-link" title="Записаться на приём">
+                                                <img class="card-img-top" src="{{ $doctor->photo_url  }}" style="width: 50px;">
+                                            </a>
+                                        </div>
+                                        <div class="col-xs-8">
+                                            <a href="{{ route('doctor', $doctor->id) }}" class="card-link" title="Записаться на приём">{{ $doctor->name }}</a>
+                                            <div>{{ $doctor->pivot->price }} руб.</div>
+                                        </div>
+                                    </div>
                                 </li>
                             @endforeach
                         @else
