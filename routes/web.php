@@ -11,6 +11,9 @@
 |
 */
 
+Route::pattern('id', '\d+');
+
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -23,5 +26,6 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/doctors', 'DoctorController@index')->name('doctors');
+Route::get('/doctors', 'DoctorController@list')->name('doctors');
+Route::get('/doctor/{id}', 'DoctorController@card')->name('doctor');
 Route::get('/services', 'ServiceController@index')->name('services');
