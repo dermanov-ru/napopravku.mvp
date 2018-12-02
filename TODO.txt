@@ -1,0 +1,6 @@
+- ajax order
+- order only for logged in users
+- seed big data
+- implement cache
+- output user orders in personal
+-- allow to cancel order
