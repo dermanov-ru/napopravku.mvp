@@ -23,14 +23,13 @@ class Doctor extends Model
     }
     
     /**
-     * Получает слоты для записи на ближайшие дни.
+     * Получает слоты для записи на ближайшие дни, начиная с завтрашнего дня.
      *
      * @param $toDays - кол-во ближайших дней.
-     *                $toDays = 0 - получить слоты только на сегодня.
      * */
     public function loadSlots( $toDays )
     {
-        $from = date("y-m-d 00:00:00");
+        $from = date("y-m-d 00:00:00", strtotime("+ 1 days"));
         $to = date('y-m-d 23:59:59', strtotime("+ $toDays days"));
         
         $this->slots = DoctorSlot::where("doctor_id", $this->id)

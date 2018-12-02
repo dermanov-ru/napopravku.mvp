@@ -20,7 +20,7 @@ class DoctorController extends Controller
     public function card($id)
     {
         $doctor = Doctor::with([ "services" ])->findOrFail($id);
-        $doctor->loadSlots(4);
+        $doctor->loadSlots(5);
         
         return view('doctor', [
             "doctor" => $doctor
