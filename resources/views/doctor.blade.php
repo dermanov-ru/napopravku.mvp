@@ -4,7 +4,7 @@
     <script type="text/javascript" src="{{ asset ('js/doctor.vue.js') }}"></script>
 
     <script>
-        let doctorApp = new DoctorApp({!! $doctor->toJson() !!});
+        let doctorApp = new DoctorApp({!! $doctor->toJson(JSON_NUMERIC_CHECK) !!});
     </script>
 @endpush
 
