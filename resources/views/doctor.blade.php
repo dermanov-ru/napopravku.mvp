@@ -63,7 +63,7 @@
                                         <div class="date">@{{  date }}</div>
 
                                         <template v-for="slot in slots">
-                                            <div :class="['slot', { 'free' : slot.is_free }, { 'selected' : selected_slot == slot }]" @click="selected_slot = slot">
+                                            <div :class="['slot', { 'free' : slot.is_free }, { 'selected' : selected_slot == slot }]" @click="select_slot(slot)">
                                                 @{{ slot.is_free ? slot.time : " - " }}
                                             </div>
                                         </template>

@@ -26,6 +26,12 @@ function DoctorApp (doctor) {
                 }
 
                 document.getElementById("order_form").submit();
+            },
+            select_slot(slot){
+                if (!slot.is_free)
+                    return;
+
+                this.selected_slot = slot;
             }
         },
     });
