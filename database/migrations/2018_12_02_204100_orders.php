@@ -19,6 +19,7 @@ class Orders extends Migration
             $table->integer('slot_id');
             $table->integer('doctor_id');
             $table->integer('price');
+            $table->integer('service_id');
             $table->string('datetime');
             $table->timestamps();
         });
