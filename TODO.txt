@@ -1,4 +1,3 @@
-- ajax order
 - order only for logged in users
 - seed big data
 - implement cache

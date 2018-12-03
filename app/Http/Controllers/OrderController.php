@@ -42,6 +42,17 @@ class OrderController extends Controller
         $order->datetime = $slot->datetime();
         $order->save();
     
-        return back()->with('order_done', true);
+        if($request->ajax()){
+            return json_encode([
+                "success" => true,
+                "msg" => "Вы успешно записались на прием!",
+                "data" => [
+                    "order_id" => $order->id
+                ],
+            ]);
+        } else {
+            // follback
+            return back()->with('order_done', true);
+        }
     }
 }

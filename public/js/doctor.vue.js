@@ -25,7 +25,30 @@ function DoctorApp (doctor) {
                     return false;
                 }
 
-                document.getElementById("order_form").submit();
+                let formData = new FormData( document.getElementById("order_form") );
+                let ctx = this;
+
+                axios({
+                    method: 'post',
+                    url: '/order',
+                    data: formData,
+                })
+                    .then(function (response) {
+                        //handle success
+                        console.log(response);
+
+                        alert(response.data.msg);
+
+                        ctx.selected_slot.is_free = false;
+                        ctx.selected_slot.time = " - ";
+                        ctx.selected_slot = {};
+                    })
+                    .catch(function (response) {
+                        //handle error
+                        console.log(response);
+
+                        alert("Что-то пошло не так :( Попробуйте повторить свой запрос позже.");
+                    });
             },
             select_slot(slot){
                 if (!slot.is_free)
