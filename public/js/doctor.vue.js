@@ -37,11 +37,18 @@ function DoctorApp (doctor) {
                         //handle success
                         console.log(response);
 
-                        alert(response.data.msg);
+                        let result = response.data;
 
-                        ctx.selected_slot.is_free = false;
-                        ctx.selected_slot.time = " - ";
-                        ctx.selected_slot = {};
+                        if (result.success) {
+                            ctx.order_selected_slot();
+                            alert("Вы успешно записались на прием! Номер вашего визита: " + result.more.order_id);
+                        } else {
+                            alert(result.msg);
+
+                            if (result.more.slot_is_not_free) {
+                                ctx.order_selected_slot();
+                            }
+                        }
                     })
                     .catch(function (response) {
                         //handle error
@@ -55,6 +62,11 @@ function DoctorApp (doctor) {
                     return;
 
                 this.selected_slot = slot;
+            },
+            order_selected_slot(){
+                this.selected_slot.is_free = false;
+                this.selected_slot.time = " - ";
+                this.selected_slot = {};
             }
         },
     });

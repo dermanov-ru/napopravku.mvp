@@ -5,13 +5,28 @@ namespace App\Http\Controllers;
 use App\Doctor;
 use App\DoctorSlot;
 use App\Service;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
     public function order(Request $request)
     {
+        $log = Log::channel( "orders" );
+        
+        $output = [
+            "success" => true,
+            "msg" => "",
+            "more" => [
+            ],
+        ];
+        
+        
+        // validate inputs
         $validator = Validator::make($request->all(), [
             'doctor_id' => 'required|integer',
             'slot_id' => 'required|integer',
@@ -19,40 +34,84 @@ class OrderController extends Controller
         ]);
         
         if ($validator->fails()) {
-            return back()
-                ->withInput()
-                ->withErrors($validator);
+            $output["success"] = false;
+            $output["msg"] = "Неверно указаны данные для записи.";
+    
+            $log->critical("wrong data selected on frontend", [
+                'user_id' => Auth::id(),
+                '\request()->all()' => \request()->all(),
+            ]);
+            
+            return response()->json($output);
         }
     
-        Service::findOrFail($request->service_id);
+        
+        // check incoming data consistence
+        try {
+            $doctor = Doctor::findOrFail($request->doctor_id);
+            $doctorService = $doctor->services()->where('service_id', $request->service_id)->firstOrFail();
+            $slot = DoctorSlot::where([
+                [ 'id', $request->slot_id ],
+                [ 'doctor_id', $request->doctor_id ],
+            ])->firstOrFail();
+        }
+        // hacker detected :)
+        catch (ModelNotFoundException $exception){
+            $output["success"] = false;
+            $output["msg"] = "Неверно указаны данные для записи.";
+            
+            $log->alert("order params is not consistent. posible hacked detected.", [
+                'user_id' => Auth::id(),
+                '\request()->all()' => \request()->all(),
+                '$exception' => $exception
+            ]);
     
-        $slot = DoctorSlot::findOrFail($request->slot_id);
-        // TODO check that slot still is free or fail
-        $slot->is_free = 0;
-        $slot->save();
+            return response()->json($output);
+        }
     
-        $doctorService = Doctor::findOrFail($request->doctor_id)->services()->where('service_id', $request->service_id)->first();
+        // check slot steel free
+        if (!$slot->is_free) {
+            $output["success"] = false;
+            $output["msg"] = "К сожалению, кто-то уже записался на это время :( Выберите другое время, пожалуйста.";
+            $output["more"]["slot_is_not_free"] = true;
+        
+            return response()->json($output);
+        }
     
+        
+        // make order
         $order = new \App\Order();
-        $order->user_id = 1; // TODO get current
+        $order->user_id = 1;
         $order->doctor_id = $request->doctor_id;
         $order->slot_id = $request->slot_id;
         $order->service_id = $request->service_id;
         $order->price = $doctorService->pivot->price;
         $order->datetime = $slot->datetime();
-        $order->save();
     
-        if($request->ajax()){
-            return json_encode([
-                "success" => true,
-                "msg" => "Вы успешно записались на прием!",
-                "data" => [
-                    "order_id" => $order->id
-                ],
-            ]);
-        } else {
-            // follback
-            return back()->with('order_done', true);
+        $slot->is_free = 0;
+    
+        try {
+            DB::transaction(function () use ($slot, $order) {
+                $slot->save();
+                $order->save();
+            }, 5);
         }
+        catch (\Exception $exception){
+            $output["success"] = false;
+            $output["msg"] = "Не удалось выполнить запись к доктору :( Попробуйте повторить запрос позже.";
+            
+            $log->critical("error while save order transaction", [
+                'user_id' => Auth::id(),
+                '\request()->all()' => \request()->all(),
+                '$exception' => $exception
+            ]);
+        
+            return response()->json($output);
+        }
+    
+        $output["more"]["order_id"] = $order->id;
+    
+        
+        return response()->json($output);
     }
 }

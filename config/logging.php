@@ -87,6 +87,13 @@ return [
             'driver' => 'errorlog',
             'level' => 'debug',
         ],
+    
+        'orders' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/orders/laravel.log'),
+            'level' => 'debug',
+            'days' => 30,
+        ],
     ],
 
 ];
