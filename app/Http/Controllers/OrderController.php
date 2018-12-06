@@ -92,7 +92,7 @@ class OrderController extends Controller
         $order->slot_id = $request->slot_id;
         $order->service_id = $request->service_id;
         $order->price = $doctorService->pivot->price;
-        $order->datetime = $slot->datetime();
+        $order->datetime = $slot->datetime;
     
         $slot->is_free = 0;
     

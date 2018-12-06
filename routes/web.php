@@ -31,3 +31,5 @@ Route::get('/doctor/{id}', 'DoctorController@card')->name('doctor');
 Route::get('/services', 'ServiceController@index')->name('services');
 
 Route::post('/order', 'OrderController@order')->name('order');
+
+Route::get('/personal', 'PersonalController@index')->name('my_orders');
