@@ -5,18 +5,11 @@
 laravel new napopravku-mvp.loc
 cd new napopravku-mvp.loc
 composer update
-```
 
-copy `.env.example` to `.env`
-
-```bash
+cp .env.example .env
 php artisan key:generate
-# Application key set successfully.
-php artisan cache:clear
-```
 
-Накатываем миграции и наполняем тестовыми данными
-```bash
+php artisan cache:clear
 php artisan migrate
 php artisan db:seed
 ```
