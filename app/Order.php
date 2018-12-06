@@ -2,10 +2,13 @@
 
 namespace App;
 
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
+    use Cachable;
+    
     public function user(  )
     {
         return $this->belongsTo('App\User');
