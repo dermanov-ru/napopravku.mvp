@@ -12,12 +12,7 @@ copy `.env.example` to `.env`
 ```bash
 php artisan key:generate
 # Application key set successfully.
-```
-
-Подключаем авторизацию
-```bash
-php artisan make:auth
-php artisan migrate
+php artisan cache:clear
 ```
 
 Накатываем миграции и наполняем тестовыми данными
