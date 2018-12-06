@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Doctor;
 use App\DoctorSlot;
+use App\Order;
 use App\Service;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class OrderController extends Controller
     
     public function order(Request $request)
     {
-        $log = Log::channel( "orders" );
+        $log = Log::channel( "orders_make" );
         $userId = Auth::id();
         
         $output = [
@@ -119,5 +120,52 @@ class OrderController extends Controller
     
         
         return response()->json($output);
+    }
+    
+    public function cancel($id)
+    {
+        $log = Log::channel( "orders_cancel" );
+        $userId = Auth::id();
+        
+        
+        // check incoming data consistence
+        try {
+            $order = Order::where([
+                [ "id", $id ],
+                [ "user_id", $userId ],
+            ])->firstOrFail();
+            $slot = DoctorSlot::findOrFail($order->slot_id);
+        }
+        // hacker detected :)
+        catch (ModelNotFoundException $exception){
+            $log->alert("order params is not consistent. posible hacked detected.", [
+                'user_id' => $userId,
+                '\request()->all()' => \request()->all(),
+                '$exception' => $exception
+            ]);
+    
+            return back();
+        }
+    
+        $slot->is_free = 1;
+    
+        try {
+            DB::transaction(function () use ($slot, $order) {
+                $order->delete();
+                $slot->save();
+            }, 5);
+        }
+        catch (\Exception $exception){
+            $log->critical("error while save order transaction", [
+                'user_id' => $userId,
+                '\request()->all()' => \request()->all(),
+                '$exception' => $exception
+            ]);
+    
+            return back();
+        }
+    
+        
+        return back();
     }
 }

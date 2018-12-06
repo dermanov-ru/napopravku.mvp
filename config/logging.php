@@ -88,9 +88,16 @@ return [
             'level' => 'debug',
         ],
     
-        'orders' => [
+        'orders_make' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/orders/laravel.log'),
+            'path' => storage_path('logs/orders/make.log'),
+            'level' => 'debug',
+            'days' => 30,
+        ],
+        
+        'orders_cancel' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/orders/cancel.log'),
             'level' => 'debug',
             'days' => 30,
         ],

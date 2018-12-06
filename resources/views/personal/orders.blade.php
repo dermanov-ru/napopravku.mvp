@@ -54,10 +54,17 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <div >Дата и время: {{ $order->datetime }}</div>
-                    <div >Врач: <a target="_blank" href="{{ route("doctor", $order->doctor->id ) }}">{{ $order->doctor->name }}</a></div>
+                    <div >Врач: <a target="_blank" href="{{ url("doctor", $order->doctor->id ) }}">{{ $order->doctor->name }}</a></div>
                     <div >Услуга: {{ $order->service->name }}</div>
                     <div >Стоимость: {{ $order->price }} руб.</div>
 
+
+                    <form class="text-right" action="{{ route('order.cancel', ['id' => $order->id]) }}" method="post">
+                        @csrf
+                        @method("delete")
+
+                        <button type="submit" class="btn btn-danger mt-2" onclick="return confirm('Вы уверены?');">Отменить</button>
+                    </form>
                 </div>
             </div>
             @endforeach
