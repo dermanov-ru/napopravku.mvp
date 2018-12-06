@@ -13,7 +13,7 @@ class PersonalController extends Controller
     
     public function index()
     {
-        $orders = \Auth::user()->orders()->whereDate('datetime', '>', Carbon::now())->orderby("datetime")->get();
+        $orders = \Auth::user()->orders()->with(["service", "doctor"])->whereDate('datetime', '>', Carbon::now())->orderby("datetime")->get();
         
         return view('personal.orders', [
             "orders" => $orders
