@@ -41,7 +41,7 @@ function DoctorApp (doctor) {
 
                         if (result.success) {
                             ctx.order_selected_slot();
-                            alert("Вы успешно записались на прием! Номер вашего визита: " + result.more.order_id);
+                            alert("Вы успешно записались на прием! Номер вашего визита: " + result.more.order_id + ". \nВы можете отменить запись в личном кабинете.");
                         } else {
                             alert(result.msg);
 
