@@ -42,10 +42,35 @@
 
             <div class="card">
                 <div class="card-body">
+                    @if (!Auth::check())
+                        <div class="alert alert-success">
+                            <a href="{{route("login")}}">Авторизуйтесь</a>, чтобы записаться на прием.
+                        </div>
+                    @endif
+
                     <form action="{{ url('order') }}" method="post" id="order_form" @submit.prevent="order">
                         @csrf
                         <input type="hidden" v-model="selected_slot.id" name="slot_id">
                         <input type="hidden" value="{{ $doctor->id }}" name="doctor_id">
+
+                        @if (Auth::check())
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Дата и время*" readonly :value="selected_datetime">
+                                <small class="form-text text-muted">Выберите дату и время в таблице</small>
+                            </div>
+
+                            <div class="form-group">
+                                <select class="form-control" required name="service_id">
+                                    <option value="">- Выбрать услугу -</option>
+
+                                    @foreach ($doctor->services as $service)
+                                        <option value="{{ $service->id }}">{{ $service->name }} ({{ $service->pivot->price }} руб.)</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary mb-5">Записаться</button>
+                        @endif
 
                         <h5 class="mb-3">Выберите дату и время приёма</h5>
                         <div class="form-group">
@@ -65,25 +90,9 @@
 
                             </div>
                         </div>
-
-
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Дата и время*" readonly :value="selected_datetime">
-                            <small class="form-text text-muted">Выберите дату и время в таблице</small>
-                        </div>
-
-                        <div class="form-group">
-                            <select class="form-control" required name="service_id">
-                                <option value="">- Выбрать услугу -</option>
-
-                                @foreach ($doctor->services as $service)
-                                    <option value="{{ $service->id }}">{{ $service->name }} ({{ $service->pivot->price }} руб.)</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary">Записаться</button>
                     </form>
+
+
                 </div>
             </div>
         </div>

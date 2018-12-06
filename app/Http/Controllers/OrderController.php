@@ -14,9 +14,15 @@ use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function order(Request $request)
     {
         $log = Log::channel( "orders" );
+        $userId = Auth::id();
         
         $output = [
             "success" => true,
@@ -32,13 +38,13 @@ class OrderController extends Controller
             'slot_id' => 'required|integer',
             'service_id' => 'required|integer',
         ]);
-        
+    
         if ($validator->fails()) {
             $output["success"] = false;
             $output["msg"] = "Неверно указаны данные для записи.";
     
             $log->critical("wrong data selected on frontend", [
-                'user_id' => Auth::id(),
+                'user_id' => $userId,
                 '\request()->all()' => \request()->all(),
             ]);
             
@@ -61,7 +67,7 @@ class OrderController extends Controller
             $output["msg"] = "Неверно указаны данные для записи.";
             
             $log->alert("order params is not consistent. posible hacked detected.", [
-                'user_id' => Auth::id(),
+                'user_id' => $userId,
                 '\request()->all()' => \request()->all(),
                 '$exception' => $exception
             ]);
@@ -81,7 +87,7 @@ class OrderController extends Controller
         
         // make order
         $order = new \App\Order();
-        $order->user_id = 1;
+        $order->user_id = $userId;
         $order->doctor_id = $request->doctor_id;
         $order->slot_id = $request->slot_id;
         $order->service_id = $request->service_id;
@@ -101,7 +107,7 @@ class OrderController extends Controller
             $output["msg"] = "Не удалось выполнить запись к доктору :( Попробуйте повторить запрос позже.";
             
             $log->critical("error while save order transaction", [
-                'user_id' => Auth::id(),
+                'user_id' => $userId,
                 '\request()->all()' => \request()->all(),
                 '$exception' => $exception
             ]);

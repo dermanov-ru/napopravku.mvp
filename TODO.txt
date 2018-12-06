@@ -1,4 +1,3 @@
-- order only for logged in users
 - seed big data
 - implement cache
 - output user orders in personal
