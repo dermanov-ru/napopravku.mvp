@@ -42,13 +42,6 @@
 
             <div class="card">
                 <div class="card-body">
-                    @if(session()->has('order_done'))
-                        <div class="alert alert-success">
-                            Вы успешно записались на прием!
-                        </div>
-                    @endif
-
-
                     <form action="{{ url('order') }}" method="post" id="order_form" @submit.prevent="order">
                         @csrf
                         <input type="hidden" v-model="selected_slot.id" name="slot_id">
