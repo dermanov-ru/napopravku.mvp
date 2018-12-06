@@ -17,7 +17,7 @@ class DoctorSlotSeeder extends Seeder
         $startTime = 3600 * 8; // "8:00";
         $finishTime = 3600 * 20.5; // "20:30";
         $step = 1800; // 0.5 hour;
-        $days = 7;
+        $days = 30;
     
         foreach ( $doctors as $doctor ) {
             for ($day = 0; $day < $days; $day++){
