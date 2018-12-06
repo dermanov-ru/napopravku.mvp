@@ -57,8 +57,11 @@ class ServicesTableSeeder extends Seeder
         ];
     
         DB::table('services')->truncate();
-        foreach ( $services as $service ) {
-            DB::table('services')->insert($service);
+        for ($i = 0; $i < 10; $i++){
+            foreach ( $services as $service ) {
+                $service["name"] .= ", вариант " . $i;
+                DB::table('services')->insert($service);
+            }
         }
     }
 }

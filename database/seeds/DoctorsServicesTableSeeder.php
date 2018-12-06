@@ -17,7 +17,7 @@ class DoctorsServicesTableSeeder extends Seeder
         DB::table('doctor_services')->truncate();
         foreach ( $doctors as $doctor ) {
             // each doctor will have 3 service
-            for ($i = 0; $i < 3; $i++){
+            for ($i = 0; $i < 5; $i++){
                 $service = $services->random();
                 $price = rand(1, 20) * 1000;
                 $doctor->services()->attach($service, [ 'price' => $price ]);

@@ -11,6 +11,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('orders')->truncate();
+        
         $this->call([
             DoctorsTableSeeder::class,
             ServicesTableSeeder::class,

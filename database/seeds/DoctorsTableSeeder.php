@@ -57,8 +57,11 @@ class DoctorsTableSeeder extends Seeder
         ];
     
         DB::table('doctors')->truncate();
-        foreach ( $doctors as $doctor ) {
-            DB::table('doctors')->insert($doctor);
+        for ($i = 0; $i < 3; $i++){
+            foreach ( $doctors as $doctor ) {
+                $doctor["name"] .= ", вариант " . $i;
+                DB::table('doctors')->insert($doctor);
+            }
         }
     }
 }
