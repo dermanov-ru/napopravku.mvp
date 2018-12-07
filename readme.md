@@ -2,7 +2,7 @@
 ### requires 
 - PHP >= 7.1 
 ```bash
-laravel new napopravku-mvp.loc
+git clone git@github.com:dermanov-ru/napopravku.mvp.git napopravku-mvp.loc
 cd new napopravku-mvp.loc
 composer update
 
